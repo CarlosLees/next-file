@@ -1,19 +1,33 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+
 import TypeList from '@/components/typeList/TypeList';
+import { useGetRequest } from '@/hooks/useRequest';
+import { Button } from '@/components/ui/button';
+import { logout } from '@/lib/action';
 
 const Home = () => {
-    const now = new Date();
+    const [time, setTime] = useState<string>('');
+    const [date, setDate] = useState<string>('');
 
-    const time = now.toLocaleTimeString('chinese', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: false,
-        timeZone: 'Asia/Shanghai',
-    });
+    useEffect(() => {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('chinese', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            timeZone: 'Asia/Shanghai',
+        });
+        const dateString = new Intl.DateTimeFormat('chinese', {
+            dateStyle: 'full',
+            timeZone: 'Asia/Shanghai',
+        }).format(now);
+        setTime(timeString);
+        setDate(dateString);
+    }, [time, date]);
 
-    const date = new Intl.DateTimeFormat('chinese', {
-        dateStyle: 'full',
-        timeZone: 'Asia/Shanghai',
-    }).format(now);
+    const { response } = useGetRequest('system');
 
     return (
         <section className="flex size-full flex-col gap-10 text-white">
@@ -29,6 +43,10 @@ const Home = () => {
                 </div>
             </div>
             <TypeList />
+            <div className="text-white">{response && JSON.stringify(response.data)}</div>
+            <form action={logout}>
+                <Button>logout</Button>
+            </form>
         </section>
     );
 };

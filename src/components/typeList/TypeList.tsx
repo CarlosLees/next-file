@@ -12,27 +12,27 @@ const TypeList = () => {
                 handleClick={() => {}}
                 className="bg-orange-400"
             />
-            <HomeCard
-                imageUrl="/icons/schedule.svg"
-                title="Schedule Meeting"
-                description="Plan your meeting"
-                handleClick={() => {}}
-                className="bg-blue-400"
-            />
-            <HomeCard
-                imageUrl="/icons/recordings.svg"
-                title="View Recordings"
-                description="Start an instant Meeting"
-                handleClick={() => {}}
-                className="bg-purple-400"
-            />
-            <HomeCard
-                imageUrl="/icons/join-meeting.svg"
-                title="Join Meeting"
-                description="via invitation link"
-                handleClick={() => {}}
-                className="bg-yellow-400"
-            />
+            {/* <HomeCard */}
+            {/*    imageUrl="/icons/schedule.svg" */}
+            {/*    title="Schedule Meeting" */}
+            {/*    description="Plan your meeting" */}
+            {/*    handleClick={() => {}} */}
+            {/*    className="bg-blue-400" */}
+            {/* /> */}
+            {/* <HomeCard */}
+            {/*    imageUrl="/icons/recordings.svg" */}
+            {/*    title="View Recordings" */}
+            {/*    description="Start an instant Meeting" */}
+            {/*    handleClick={() => {}} */}
+            {/*    className="bg-purple-400" */}
+            {/* /> */}
+            {/* <HomeCard */}
+            {/*    imageUrl="/icons/join-meeting.svg" */}
+            {/*    title="Join Meeting" */}
+            {/*    description="via invitation link" */}
+            {/*    handleClick={() => {}} */}
+            {/*    className="bg-yellow-400" */}
+            {/* /> */}
 
             {/* <MeetingModal */}
             {/*    isOpen={modalOpen} */}
