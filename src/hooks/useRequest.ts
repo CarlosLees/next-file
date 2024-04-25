@@ -10,10 +10,14 @@ interface ResponseData<T> {
     data: T;
 }
 const powerFetch = async (url: string, config: RequestInit) => {
-    const response = await fetch(url, config);
     // 处理返回结果
-    const resp: ResponseData<any> = await response.json();
-    return resp;
+    try {
+        const response = await fetch(url, config);
+        const resp: ResponseData<any> = await response.json();
+        return resp;
+    } catch (e) {
+        return null;
+    }
 };
 
 const buildCommonHeader = () => {
@@ -42,35 +46,26 @@ export const useGetRequest = (url: string, params?: Record<string, any>) => {
     return { response };
 };
 
-// export const usePostRequest = async (url: string, data?: string) => {
-//     return powerFetch(url, {
-//         method: 'POST',
-//         headers: {
-//             ...buildCommonHeader(),
-//             'Content-Type': 'application/json;charset=UTF-8',
-//         },
-//         body: data,
-//     });
-// };
-//
-// export const usePutRequest = async (url: string, data: Record<string, any>) => {
-//     return powerFetch(url, {
-//         method: 'PUT',
-//         headers: {
-//             ...buildCommonHeader(),
-//             'Content-Type': 'application/json;charset=UTF-8',
-//         },
-//         body: JSON.stringify(data),
-//     });
-// };
-//
-// export const useDeleteRequest = async (url: string, data: Record<string, any>) => {
-//     return powerFetch(url, {
-//         method: 'DELETE',
-//         headers: {
-//             ...buildCommonHeader(),
-//             'Content-Type': 'application/json;charset=UTF-8',
-//         },
-//         body: JSON.stringify(data),
-//     });
-// };
+export const usePostRequest = async (url: string, data?: string) => {
+    const [response, setResponse] = useState<ResponseData<any>>();
+
+    useEffect(() => {
+        const request = async () => {
+            const responseData = await powerFetch(url, {
+                method: 'POST',
+                headers: {
+                    ...buildCommonHeader(),
+                    'Content-Type': 'application/json;charset=UTF-8',
+                },
+                body: data,
+            });
+
+            if (responseData) {
+                setResponse(responseData);
+            }
+        };
+        request().then();
+    }, [url, data]);
+
+    return { response };
+};
