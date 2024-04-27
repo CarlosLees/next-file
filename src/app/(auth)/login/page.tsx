@@ -6,6 +6,8 @@ import Link from 'next/link';
 
 import { login } from '@/lib/action';
 
+import styles from './login.module.css';
+
 const LoginPage = () => {
     const [state, loginFormAction] = useFormState(login, undefined);
 
@@ -17,15 +19,13 @@ const LoginPage = () => {
                     type="text"
                     name="username"
                     placeholder="username"
-                    className="p-4 rounded-[12px] outline-none
-                            bg-blend-soft-light text-black font-bold text-[16px]"
+                    className={styles.input}
                 />
                 <input
                     type="password"
                     name="password"
                     placeholder="password"
-                    className="p-4 rounded-[12px] outline-none
-                            bg-blend-soft-light text-black font-bold text-[16px]"
+                    className={styles.input}
                 />
                 <button
                     className="p-4 bg-blue-600 rounded-[12px] border-none text-white

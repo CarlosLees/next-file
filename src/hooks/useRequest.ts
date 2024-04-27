@@ -4,6 +4,8 @@ import * as QueryString from 'querystring';
 
 import { useEffect, useState } from 'react';
 
+import { useToast } from '@/components/ui/use-toast';
+
 interface ResponseData<T> {
     code: number;
     msg: string;
@@ -26,8 +28,9 @@ const buildCommonHeader = () => {
     };
 };
 
-export const useGetRequest = (url: string, params?: Record<string, any>) => {
-    const [response, setResponse] = useState<ResponseData<any>>();
+export const useGetRequest = (url?: string, params?: Record<string, any>) => {
+    const [response, setResponse] = useState<any>();
+    const { toast } = useToast();
 
     useEffect(() => {
         const request = async () => {
@@ -37,13 +40,16 @@ export const useGetRequest = (url: string, params?: Record<string, any>) => {
                     ...buildCommonHeader(),
                 },
             });
-            if (data) {
-                setResponse(data);
+            if (data && data.code === 200) {
+                setResponse(data.data);
+            } else if (data && data.code !== 200) {
+                toast({ title: data.msg });
             }
         };
         request().then();
     }, [url, params]);
-    return { response };
+
+    return response;
 };
 
 export const usePostRequest = async (url: string, data?: string) => {

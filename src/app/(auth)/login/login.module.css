@@ -1,0 +1,3 @@
+.input {
+    @apply p-4 rounded-[12px] outline-none bg-blend-soft-light text-black font-bold text-[16px]
+}
