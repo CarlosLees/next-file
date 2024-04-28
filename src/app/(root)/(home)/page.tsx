@@ -1,35 +1,20 @@
-'use client';
-
-import { useEffect, useState } from 'react';
-
 import TypeList from '@/components/typeList/TypeList';
 import { Button } from '@/components/ui/button';
 import { logout } from '@/lib/action';
-import { useGetRequest } from '@/hooks/useRequest';
-import { SystemHardwareInfo } from '@/types/model';
 import SystemCard from '@/components/systemCard/SystemCard';
 
-const Home = () => {
-    const [time, setTime] = useState<string>('');
-    const [date, setDate] = useState<string>('');
-
-    const data = useGetRequest('/system/info') as SystemHardwareInfo;
-
-    useEffect(() => {
-        const now = new Date();
-        const timeString = now.toLocaleTimeString('chinese', {
-            hour: '2-digit',
-            minute: '2-digit',
-            hour12: false,
-            timeZone: 'Asia/Shanghai',
-        });
-        const dateString = new Intl.DateTimeFormat('chinese', {
-            dateStyle: 'full',
-            timeZone: 'Asia/Shanghai',
-        }).format(now);
-        setTime(timeString);
-        setDate(dateString);
-    }, [time, date]);
+const Home = async () => {
+    const now = new Date();
+    const time = now.toLocaleTimeString('chinese', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false,
+        timeZone: 'Asia/Shanghai',
+    });
+    const date = new Intl.DateTimeFormat('chinese', {
+        dateStyle: 'full',
+        timeZone: 'Asia/Shanghai',
+    }).format(now);
 
     return (
         <section className="flex size-full flex-col gap-10 text-white">

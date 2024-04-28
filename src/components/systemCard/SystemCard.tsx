@@ -1,20 +1,42 @@
-import { CpuIcon } from 'lucide-react';
+import { CpuIcon, HardDriveIcon, MemoryStickIcon } from 'lucide-react';
 
-const SystemCard = () => {
+import { systemApi } from '@/lib/action';
+import { SystemHardwareInfo } from '@/types/model';
+
+const SystemCard = async () => {
+    const data = (await systemApi('system/info')) as SystemHardwareInfo;
+
     return (
         <section className="bg-dark-1 rounded-lg shadow-md dark:bg-gray-800 p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
                 <div className="flex items-center gap-2">
-                    <CpuIcon className="h-6 w-6 mr-2 text-primary text-blue-300" />
+                    <MemoryStickIcon className="h-6 w-6 mr-2 text-primary text-red-500" />
                     <div>
-                        <h3 className="font-medium">Processor</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Intel Core i7-11700K</p>
-                        <h3 className="font-medium">Processor</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Intel Core i7-11700K</p>
-                        <h3 className="font-medium">Processor</h3>
-                        <p className="text-gray-500 dark:text-gray-400">Intel Core i7-11700K</p>
+                        <h3 className="font-medium">totalMemory</h3>
+                        <p className="text-gray-500 dark:text-gray-400">{`${data.totalMemory}G`}</p>
+                        <h3 className="font-medium">usedMemory</h3>
+                        <p className="text-gray-500 dark:text-gray-400">{`${data.usedMemory}G`}</p>
                     </div>
                 </div>
+                <div className="flex items-center gap-2">
+                    <CpuIcon className="h-6 w-6 mr-2 text-primary text-red-500" />
+                    <div>
+                        <h3 className="font-medium">totalSwap</h3>
+                        <p className="text-gray-500 dark:text-gray-400">{`${data.totalSwap}G`}</p>
+                        <h3 className="font-medium">usedSwap</h3>
+                        <p className="text-gray-500 dark:text-gray-400">{`${data.usedSwap}G`}</p>
+                    </div>
+                </div>
+                <div className="flex items-center gap-2">
+                    <HardDriveIcon className="h-6 w-6 mr-2 text-primary text-red-500" />
+                    <div>
+                        <h3 className="font-medium">systemName</h3>
+                        <p className="text-gray-500 dark:text-gray-400">{`${data.systemName}`}</p>
+                        <h3 className="font-medium">cpuLength</h3>
+                        <p className="text-gray-500 dark:text-gray-400">{`${data.cpuLength}`}</p>
+                    </div>
+                </div>
+
                 {/*    <div className="flex items-center"> */}
                 {/*        <MemoryStickIcon className="h-6 w-6 mr-2 text-primary" /> */}
                 {/*        <div> */}

@@ -1,6 +1,4 @@
-'use client';
-
-import { useGetRequest } from '@/hooks/useRequest';
+import { systemApi } from '@/lib/action';
 import { SystemInfoResponse } from '@/types/model';
 
 const Table = ({ title, description }: { title: string; description: string }) => {
@@ -14,9 +12,8 @@ const Table = ({ title, description }: { title: string; description: string }) =
     );
 };
 
-const Personal = () => {
-    const deviceInfo = useGetRequest('system') as SystemInfoResponse;
-    console.log(deviceInfo);
+const Personal = async () => {
+    const deviceInfo = (await systemApi('system')) as SystemInfoResponse;
 
     return (
         <section className="flex size-full flex-col gap-10 text-white">
