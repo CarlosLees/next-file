@@ -1,65 +1,67 @@
 import { CpuIcon, HardDriveIcon, MemoryStickIcon } from 'lucide-react';
 
+import { ReactNode } from 'react';
+
 import { systemApi } from '@/lib/action';
 import { SystemHardwareInfo } from '@/types/model';
+
+const Table = ({
+    firstTitle,
+    secondTitle,
+    firstDescription,
+    secondDescription,
+    icon,
+}: {
+    firstTitle: string;
+    secondTitle: string;
+    firstDescription: string;
+    secondDescription: string;
+    icon: ReactNode;
+}) => {
+    return (
+        <>
+            <div className="flex items-center gap-3 border-gray-400 border p-8 rounded-3xl">
+                {icon}
+                <div className="flex gap-3 flex-col items-center">
+                    <h3 className="font-bold text-2xl">{firstTitle}</h3>
+                    <p className="text-blue-400 text-xl">{firstDescription}</p>
+                    <h3 className="font-bold text-2xl">{secondTitle}</h3>
+                    <p className="text-blue-400 text-xl">{secondDescription}</p>
+                </div>
+            </div>
+        </>
+    );
+};
 
 const SystemCard = async () => {
     const data = (await systemApi('system/info')) as SystemHardwareInfo;
 
     return (
-        <section className="bg-dark-1 rounded-lg shadow-md dark:bg-gray-800 p-6">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-                <div className="flex items-center gap-2">
-                    <MemoryStickIcon className="h-6 w-6 mr-2 text-primary text-red-500" />
-                    <div>
-                        <h3 className="font-medium">totalMemory</h3>
-                        <p className="text-gray-500 dark:text-gray-400">{`${data.totalMemory}G`}</p>
-                        <h3 className="font-medium">usedMemory</h3>
-                        <p className="text-gray-500 dark:text-gray-400">{`${data.usedMemory}G`}</p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <CpuIcon className="h-6 w-6 mr-2 text-primary text-red-500" />
-                    <div>
-                        <h3 className="font-medium">totalSwap</h3>
-                        <p className="text-gray-500 dark:text-gray-400">{`${data.totalSwap}G`}</p>
-                        <h3 className="font-medium">usedSwap</h3>
-                        <p className="text-gray-500 dark:text-gray-400">{`${data.usedSwap}G`}</p>
-                    </div>
-                </div>
-                <div className="flex items-center gap-2">
-                    <HardDriveIcon className="h-6 w-6 mr-2 text-primary text-red-500" />
-                    <div>
-                        <h3 className="font-medium">systemName</h3>
-                        <p className="text-gray-500 dark:text-gray-400">{`${data.systemName}`}</p>
-                        <h3 className="font-medium">cpuLength</h3>
-                        <p className="text-gray-500 dark:text-gray-400">{`${data.cpuLength}`}</p>
-                    </div>
-                </div>
-
-                {/*    <div className="flex items-center"> */}
-                {/*        <MemoryStickIcon className="h-6 w-6 mr-2 text-primary" /> */}
-                {/*        <div> */}
-                {/*            <h3 className="font-medium">RAM</h3> */}
-                {/*            <p className="text-gray-500 dark:text-gray-400">32GB DDR4 3200MHz</p> */}
-                {/*        </div> */}
-                {/*    </div> */}
-                {/*    <div className="flex items-center"> */}
-                {/*        <HardDriveIcon className="h-6 w-6 mr-2 text-primary" /> */}
-                {/*        <div> */}
-                {/*            <h3 className="font-medium">Storage</h3> */}
-                {/*            <p className="text-gray-500 dark:text-gray-400"> */}
-                {/*                1TB M.2 NVMe SSD, 2TB HDD */}
-                {/*            </p> */}
-                {/*        </div> */}
-                {/*    </div> */}
-                {/*    <div className="flex items-center"> */}
-                {/*        <CpuIcon className="h-6 w-6 mr-2 text-primary" /> */}
-                {/*        <div> */}
-                {/*            <h3 className="font-medium">Graphics Card</h3> */}
-                {/*            <p className="text-gray-500 dark:text-gray-400">NVIDIA GeForce RTX 3080</p> */}
-                {/*        </div> */}
-                {/*    </div> */}
+        <section className="bg-dark-1 shadow-md p-6">
+            <div className="flex gap-6">
+                <Table
+                    firstTitle="TotalMemory"
+                    secondTitle="UsedMemory"
+                    firstDescription={`${data.totalMemory}G`}
+                    secondDescription={`${data.usedMemory}G`}
+                    icon={
+                        <MemoryStickIcon className="h-8 w-8 mr-2 text-primary text-red-500 max-sm:hidden" />
+                    }
+                />
+                <Table
+                    firstTitle="TotalSwap"
+                    secondTitle="UsedSwap"
+                    firstDescription={`${data.totalSwap}G`}
+                    secondDescription={`${data.usedSwap}G`}
+                    icon={<CpuIcon className="h-8 w-8 mr-2 text-primary text-red-500" />}
+                />
+                <Table
+                    firstTitle="SystemName"
+                    secondTitle="CpuLength"
+                    firstDescription={`${data.systemName}`}
+                    secondDescription={`${data.cpuLength}`}
+                    icon={<HardDriveIcon className="h-8 w-8 mr-2 text-primary text-red-500" />}
+                />
             </div>
         </section>
     );
