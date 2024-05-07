@@ -1,5 +1,5 @@
 import { systemApi } from '@/lib/action';
-import { SystemInfoResponse } from '@/types/model';
+import { SystemHardwareInfo, SystemInfoResponse } from '@/types/model';
 
 const Table = ({ title, description }: { title: string; description: string }) => {
     return (
@@ -14,23 +14,45 @@ const Table = ({ title, description }: { title: string; description: string }) =
 
 const Personal = async () => {
     const deviceInfo = (await systemApi('system')) as SystemInfoResponse;
+    const hardwareInfo = (await systemApi('system/info')) as SystemHardwareInfo;
 
     return (
         <section className="flex size-full flex-col gap-10 text-white">
             <h1 className="text-xl font-bold lg:text-3xl">配置信息</h1>
-            <div className="flex w-full flex-col gap-8 xl:max-w-[900px]">
-                {deviceInfo && (
-                    <>
-                        <Table title="真实姓名" description={deviceInfo.realName} />
-                        <Table title="用户名" description={deviceInfo.username} />
-                        <Table title="设备名称" description={deviceInfo.deviceName} />
-                        <Table title="本机名称" description={deviceInfo.hostname} />
-                        <Table title="设备平台" description={deviceInfo.platform} />
-                        <Table title="版本" description={deviceInfo.distro} />
-                        <Table title="本地桌面" description={deviceInfo.desktopEnv} />
-                        <Table title="系统架构" description={deviceInfo.arch} />
-                    </>
-                )}
+            <div className="flex gap-2">
+                <div className="flex flex-1 flex-col gap-8 xl:max-w-[900px]">
+                    {deviceInfo && (
+                        <>
+                            <Table title="真实姓名" description={deviceInfo.realName} />
+                            <Table title="用户名" description={deviceInfo.username} />
+                            <Table title="设备名称" description={deviceInfo.deviceName} />
+                            <Table title="本机名称" description={deviceInfo.hostname} />
+                            <Table title="设备平台" description={deviceInfo.platform} />
+                            <Table title="版本" description={deviceInfo.distro} />
+                            <Table title="系统名称" description={deviceInfo.desktopEnv} />
+                            <Table title="系统架构" description={deviceInfo.arch} />
+                        </>
+                    )}
+                </div>
+                <div className="flex-1 w-full">
+                    {hardwareInfo &&
+                        hardwareInfo.disks.length !== 0 &&
+                        hardwareInfo.disks.map((disk, index) => {
+                            return (
+                                <div
+                                    className="flex flex-col items-start gap-3 border-gray-500 mb-5"
+                                    key={disk.name}
+                                >
+                                    <Table title="硬盘类型" description={disk.kind} />
+                                    <Table title="硬盘名称" description={disk.name} />
+                                    <Table title="可用空间" description={disk.availableSpace} />
+                                    <Table title="硬盘格式" description={disk.fileSystem} />
+                                    <Table title="挂载点" description={disk.mountPoint} />
+                                    <Table title="总容量" description={disk.totalSpace} />
+                                </div>
+                            );
+                        })}
+                </div>
             </div>
         </section>
     );

@@ -1,7 +1,12 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-const Navbar = () => {
+import { systemApi } from '@/lib/action';
+import { SystemHardwareInfo } from '@/types/model';
+
+const Navbar = async () => {
+    const data = (await systemApi('system/info')) as SystemHardwareInfo;
+
     return (
         <nav className="flex-between fixed z-50 w-full bg-dark-1 px-6 py-4 lg:px-10">
             <Link href="/" className="flex items-center gap-4">
@@ -14,6 +19,16 @@ const Navbar = () => {
                 />
                 <p className="text-[26px] font-extrabold text-white max-sm:hidden">File Manager</p>
             </Link>
+            <div className="flex">
+                <div className="flex gap-2">
+                    {data.temperatures &&
+                        data.temperatures.length !== 0 &&
+                        data.temperatures.map((temp) => {
+                            return <div key={temp.label}>{temp.maxTemperature}</div>;
+                        })}
+                </div>
+                <div>温度</div>
+            </div>
         </nav>
     );
 };
