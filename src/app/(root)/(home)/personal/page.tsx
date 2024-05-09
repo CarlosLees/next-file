@@ -19,7 +19,7 @@ const Personal = async () => {
     return (
         <section className="flex size-full flex-col gap-10 text-white">
             <h1 className="text-xl font-bold lg:text-3xl">配置信息</h1>
-            <div className="flex gap-2">
+            <div className="flex gap-2 max-sm:flex-col">
                 <div className="flex flex-1 flex-col gap-8 xl:max-w-[900px]">
                     {deviceInfo && (
                         <>
