@@ -1,5 +1,7 @@
 'use server';
 
+import QueryString from 'qs';
+
 import { signIn, signOut } from '@/lib/auth';
 
 interface ResponseData<T> {
@@ -34,12 +36,16 @@ export const logout = async () => {
     await signOut();
 };
 
-export const systemApi = async (url?: string) => {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${url}`, {
+export const getApi = async (url?: string, params?: Record<string, any>) => {
+    let urlRet = url;
+    if (params) {
+        urlRet = `${url}?${QueryString.stringify(params)}`;
+    }
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}${urlRet}`, {
         headers: {
             ...buildCommonHeader(),
         },
-        cache: 'no-cache',
+        cache: 'force-cache',
     });
     const date: ResponseData<any> = await response.json();
     if (date && date.code === 200) {

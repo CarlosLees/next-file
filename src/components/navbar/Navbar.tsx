@@ -1,21 +1,20 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { systemApi } from '@/lib/action';
 import { SystemHardwareInfo } from '@/types/model';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { getApi } from '@/lib/action';
 
-const TempTable = ({ title, content }: { title: string; content: string }) => {
+const TempTable = ({ content }: { content: string }) => {
     return (
-        <div className="flex flex-row gap-2 items-center">
-            <h1 className="text-white text-base font-medium text-[12px] max-sm:hidden">{title}:</h1>
+        <div className="flex flex-row gap-2 items-center px-2">
             <h1 className="truncate text-orange-400 text-base text-[12px]">{content}</h1>
         </div>
     );
 };
 
 const Navbar = async () => {
-    const data = (await systemApi('system/info')) as SystemHardwareInfo;
+    const data = (await getApi('/system/info')) as SystemHardwareInfo;
 
     return (
         <nav className="flex-between fixed z-50 w-full bg-dark-1 px-6 py-4 lg:px-10">
@@ -35,9 +34,14 @@ const Navbar = async () => {
                         data.temperatures.length !== 0 &&
                         data.temperatures.map((temp) => {
                             return (
-                                <div key={temp.label} className="flex flex-col">
-                                    <TempTable title="名称" content={temp.label} />
-                                    <TempTable title="温度" content={temp.temperature} />
+                                <div
+                                    key={temp.label}
+                                    className="flex flex-col border border-gray-500 rounded-xl justify-center items-center"
+                                >
+                                    <TempTable content={temp.label} />
+                                    <TempTable
+                                        content={`${temp.temperature.toString().split('.')[0]}\u00B0C`}
+                                    />
                                 </div>
                             );
                         })}

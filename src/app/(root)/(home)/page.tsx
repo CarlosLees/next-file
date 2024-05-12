@@ -1,7 +1,4 @@
 import TypeList from '@/components/typeList/TypeList';
-import { Button } from '@/components/ui/button';
-import { logout } from '@/lib/action';
-import SystemCard from '@/components/systemCard/SystemCard';
 
 const Home = async () => {
     const now = new Date();
@@ -24,13 +21,12 @@ const Home = async () => {
                         <h1 className="text-4xl font-extrabold lg:text-7xl">{time}</h1>
                         <p className="text-lg font-medium text-sky-300 lg:text-2xl">{date}</p>
                     </div>
-                    <SystemCard />
                 </div>
             </div>
             <TypeList />
-            <form action={logout}>
-                <Button>logout</Button>
-            </form>
+            {/* <form action={logout}> */}
+            {/*    <Button>logout</Button> */}
+            {/* </form> */}
         </section>
     );
 };

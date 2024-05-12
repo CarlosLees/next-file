@@ -34,3 +34,16 @@ interface SystemTemperature {
     maxTemperature: string;
     label: string;
 }
+
+export interface HomePathFileResponse {
+    file_type: number;
+    file_name: string;
+}
+
+export interface HomePageFolders {
+    id: number;
+    parentId: number;
+    createTime: string;
+    updateTime: string;
+    folderName: string;
+}

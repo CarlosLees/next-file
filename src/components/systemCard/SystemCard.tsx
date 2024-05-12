@@ -1,5 +1,5 @@
-import { systemApi } from '@/lib/action';
 import { SystemHardwareInfo } from '@/types/model';
+import { getApi } from '@/lib/action';
 
 const Table = ({
     firstTitle,
@@ -27,7 +27,7 @@ const Table = ({
 };
 
 const SystemCard = async () => {
-    const data = (await systemApi('system/info')) as SystemHardwareInfo;
+    const data = (await getApi('/system/info')) as SystemHardwareInfo;
 
     return (
         <section className="bg-dark-1 shadow-md p-6">
