@@ -32,7 +32,7 @@ const TypeList = () => {
                                 title={folder.folderName}
                                 description="Start an instant Meeting"
                                 handleClick={() => {
-                                    router.push('/file', {});
+                                    router.push(`file/index`, {});
                                 }}
                                 className="bg-orange-400"
                             />
