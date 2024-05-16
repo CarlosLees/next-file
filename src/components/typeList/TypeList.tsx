@@ -15,9 +15,7 @@ const TypeList = () => {
     useEffect(() => {
         // 获取首页全部文件夹
         getApi('/path/home_page_folders').then((res: HomePageFolders[]) => {
-            if (res) {
-                setFolders(res);
-            }
+            setFolders(res || []);
         });
     }, []);
 
@@ -32,7 +30,7 @@ const TypeList = () => {
                                 title={folder.folderName}
                                 description="Start an instant Meeting"
                                 handleClick={() => {
-                                    router.push(`file/index`, {});
+                                    router.push(`file/${folder.folderName}?id=${folder.id}`);
                                 }}
                                 className="bg-orange-400"
                             />

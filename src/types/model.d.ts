@@ -46,4 +46,5 @@ export interface HomePageFolders {
     createTime: string;
     updateTime: string;
     folderName: string;
+    fileType: number;
 }

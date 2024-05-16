@@ -45,7 +45,7 @@ export const getApi = async (url?: string, params?: Record<string, any>) => {
         headers: {
             ...buildCommonHeader(),
         },
-        cache: 'force-cache',
+        cache: 'no-cache',
     });
     const date: ResponseData<any> = await response.json();
     if (date && date.code === 200) {

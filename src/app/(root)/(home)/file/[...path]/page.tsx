@@ -3,23 +3,29 @@
 import { useEffect, useState } from 'react';
 
 import { getApi } from '@/lib/action';
-import { HomePathFileResponse } from '@/types/model';
+import { HomePageFolders } from '@/types/model';
 import { Button } from '@/components/ui/button';
 
-const File = ({ params }: { params: { path: string } }) => {
-    console.log(params.path);
-    const [data, setData] = useState<HomePathFileResponse[]>([]);
+const File = ({
+    params,
+    searchParams,
+}: {
+    params: { path: string };
+    searchParams: { id: string };
+}) => {
+    console.log(searchParams.id);
+    const [data, setData] = useState<HomePageFolders[]>([]);
 
     useEffect(() => {
         // 首次进入 获取文件类型
-        getApi('/path/folder_from_path', {
-            path_type: 1,
-        }).then((response: HomePathFileResponse[]) => {
-            if (response) {
-                setData(response);
-            }
+        getApi('/path/current_path_folder', {
+            parent_id: searchParams.id,
+            path: params.path.toString().replaceAll(',', '/'),
+            intact_path: params.path.toString().replaceAll(',', '/'),
+        }).then((response: HomePageFolders[]) => {
+            setData(response || []);
         });
-    }, [params.path]);
+    }, [params]);
 
     return (
         <div>
@@ -28,8 +34,8 @@ const File = ({ params }: { params: { path: string } }) => {
                 {data &&
                     data.map((entity) => {
                         return (
-                            <div className="text-white" key={entity.fileName}>
-                                {entity.fileName}:{entity.fileType === 1 && <Button>播放</Button>}
+                            <div className="text-white" key={entity.id}>
+                                {entity.folderName}:{entity.fileType === 1 && <Button>播放</Button>}
                             </div>
                         );
                     })}
