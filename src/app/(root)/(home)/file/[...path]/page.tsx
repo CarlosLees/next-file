@@ -2,8 +2,19 @@
 
 import { useEffect, useState } from 'react';
 
+import { useRouter } from 'next/navigation';
+
 import { getApi } from '@/lib/action';
 import { HomePageFolders } from '@/types/model';
+import {
+    Table,
+    TableBody,
+    TableCaption,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
 
 const File = ({
@@ -13,15 +24,18 @@ const File = ({
     params: { path: string };
     searchParams: { id: string };
 }) => {
-    console.log(searchParams.id);
+    const router = useRouter();
+    const path = params.path.toString().replaceAll(',', '/');
+    console.log(path);
     const [data, setData] = useState<HomePageFolders[]>([]);
 
+    console.log(path);
     useEffect(() => {
         // 首次进入 获取文件类型
         getApi('/path/current_path_folder', {
             parent_id: searchParams.id,
-            path: params.path.toString().replaceAll(',', '/'),
-            intact_path: params.path.toString().replaceAll(',', '/'),
+            path,
+            intact_path: path,
         }).then((response: HomePageFolders[]) => {
             setData(response || []);
         });
@@ -31,14 +45,48 @@ const File = ({
         <div>
             文件信息列表:
             <div className="text-white">
-                {data &&
-                    data.map((entity) => {
-                        return (
-                            <div className="text-white" key={entity.id}>
-                                {entity.folderName}:{entity.fileType === 1 && <Button>播放</Button>}
-                            </div>
-                        );
-                    })}
+                <Table>
+                    <TableCaption>文件列表</TableCaption>
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead className="w-[100px]">id</TableHead>
+                            <TableHead>文件名称</TableHead>
+                            <TableHead>文件类型</TableHead>
+                            <TableHead className="text-right">上传时间</TableHead>
+                            <TableHead>操作</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                        {data &&
+                            data.map((entity) => {
+                                return (
+                                    <TableRow key={entity.id}>
+                                        <TableCell className="font-medium">{entity.id}</TableCell>
+                                        <TableCell>{entity.folderName}</TableCell>
+                                        <TableCell>
+                                            {entity.fileType === 1 ? '文件' : '文件夹'}
+                                        </TableCell>
+                                        <TableCell className="text-right">
+                                            {entity.createTime}
+                                        </TableCell>
+                                        {entity.fileType === 1 ? (
+                                            <Button>查看详情</Button>
+                                        ) : (
+                                            <Button
+                                                onClick={() => {
+                                                    router.push(
+                                                        `${path}/${entity.folderName}?id=${entity.id}`,
+                                                    );
+                                                }}
+                                            >
+                                                查看
+                                            </Button>
+                                        )}
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
             </div>
         </div>
     );
