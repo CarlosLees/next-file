@@ -2,10 +2,12 @@
 
 import { useEffect, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+
+import { usePathname } from 'next/navigation';
 
 import { getApi } from '@/lib/action';
-import { HomePageFolders } from '@/types/model';
+import { CurrentPathFolders, HomePageFolders } from '@/types/model';
 import {
     Table,
     TableBody,
@@ -24,22 +26,25 @@ const File = ({
     params: { path: string };
     searchParams: { id: string };
 }) => {
-    const router = useRouter();
-    const path = params.path.toString().replaceAll(',', '/');
-    console.log(path);
-    const [data, setData] = useState<HomePageFolders[]>([]);
+    const pathname = usePathname();
+    console.log('pathname', pathname);
 
-    console.log(path);
+    const [data, setData] = useState<HomePageFolders[]>([]);
+    const [currentPath, setCurrentPath] = useState('');
+
     useEffect(() => {
+        const path = params.path.toString().replaceAll(',', '/');
+
         // 首次进入 获取文件类型
         getApi('/path/current_path_folder', {
             parent_id: searchParams.id,
-            path,
             intact_path: path,
-        }).then((response: HomePageFolders[]) => {
-            setData(response || []);
+        }).then((response: CurrentPathFolders) => {
+            console.log(response.currentPath);
+            setData(response.data || []);
+            setCurrentPath(response.currentPath || '');
         });
-    }, [params]);
+    }, [searchParams.id]);
 
     return (
         <div>
@@ -69,19 +74,15 @@ const File = ({
                                         <TableCell className="text-right">
                                             {entity.createTime}
                                         </TableCell>
-                                        {entity.fileType === 1 ? (
-                                            <Button>查看详情</Button>
-                                        ) : (
-                                            <Button
-                                                onClick={() => {
-                                                    router.push(
-                                                        `${path}/${entity.folderName}?id=${entity.id}`,
-                                                    );
-                                                }}
-                                            >
-                                                查看
-                                            </Button>
-                                        )}
+                                        <div>
+                                            {entity.fileType === 1 ? (
+                                                <Button>查看详情</Button>
+                                            ) : (
+                                                <Link href={`${entity.folderName}?id=${entity.id}`}>
+                                                    查看
+                                                </Link>
+                                            )}
+                                        </div>
                                     </TableRow>
                                 );
                             })}

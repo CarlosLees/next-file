@@ -35,9 +35,9 @@ interface SystemTemperature {
     label: string;
 }
 
-export interface HomePathFileResponse {
-    fileType: number;
-    fileName: string;
+export interface CurrentPathFolders {
+    data: HomePageFolders[];
+    currentPath: string;
 }
 
 export interface HomePageFolders {
